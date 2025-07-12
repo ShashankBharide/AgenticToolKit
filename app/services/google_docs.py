@@ -1,7 +1,9 @@
 import os
 import logging
 from google.oauth2 import service_account  # Import Service Account auth class
-from googleapiclient.discovery import build  # Google API client library
+from googleapiclient.discovery import build
+
+from app import services  # Google API client library
 
 # Define the API scopes we need:
 # - documents: allows creating and editing Google Docs
@@ -62,7 +64,7 @@ def create_google_doc(title, content):
         }]
 
         # Execute the batch update request to insert the text.
-        service.documents().batchUpdate(
+        services.documents().batchUpdate(
             documentId=doc_id,
             body={'requests': requests}
         ).execute()
@@ -74,3 +76,15 @@ def create_google_doc(title, content):
         # Log any error and return a user-friendly message.
         logging.error(f"Google Docs API error: {e}")
         return {"error": "There was a problem creating your Google Doc. Please try again later."}
+
+def test_service_account_access():
+    creds = service_account.Credentials.from_service_account_file(
+        GOOGLE_CREDENTIALS_PATH,
+        scopes=SCOPES
+    )
+    drive_service = build('drive', 'v3', credentials=creds)
+    results = drive_service.files().list(
+        q=f"'{FOLDER_ID}' in parents",
+        fields="files(id, name)"
+    ).execute()
+    print("Files in wbw_posts as seen by service account:", results.get('files', []))
