@@ -17,7 +17,10 @@ def get_oauth_creds():
     - If not, it opens a browser for you to log in and saves the token for next time.
     """
     creds = None
+<<<<<<< HEAD
     # If token.pickle exists, load the saved credentials
+=======
+>>>>>>> 35a90a9744116bbee9c22a035651d858e49946fa
     if os.path.exists('token.pickle'):
         with open('token.pickle', 'rb') as token:
             creds = pickle.load(token)
@@ -72,4 +75,8 @@ def create_google_doc(title, content):
     except Exception as e:
         # Print and return a friendly error message if something goes wrong
         print(f"Google Docs API error: {e}")
+<<<<<<< HEAD
         return {"error": "There was a problem creating your Google Doc. Please try again later."}
+=======
+        return {"error": "There was a problem creating your Google Doc. Please try again later."}
+>>>>>>> 35a90a9744116bbee9c22a035651d858e49946fa
