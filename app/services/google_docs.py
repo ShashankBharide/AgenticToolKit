@@ -37,18 +37,6 @@ def create_google_doc(title, content):
         doc = service.documents().create(body={'title': title}).execute()
         doc_id = doc.get('documentId')  # Extract the document ID
 
-        # Grant permissions using Drive API
-        drive_service = build('drive', 'v3', credentials=creds)
-        permission = {
-            "type": "anyone",
-            "role": "reader"  # or "writer" if you want to let anyone edit
-        }
-
-        drive_service.permissions().create(
-            fileId=doc_id,
-            body=permission
-        ).execute()
-
         # Prepare the request to insert text at the start of the document.
         requests = [{
             'insertText': {
