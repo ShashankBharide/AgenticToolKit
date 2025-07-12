@@ -15,6 +15,7 @@ SCOPES = [
 # If the variable is not set, default to 'credentials.json' in current folder.
 GOOGLE_CREDENTIALS_PATH = os.getenv("GOOGLE_CREDENTIALS_PATH", "credentials.json")
 
+FOLDER_ID = "1NL2GbtP-1UFtk3O820P1kJ9Bxyqhbl4O"
 def create_google_doc(title, content):
     """
     Creates or updates a Google Doc with the specified title and content.
