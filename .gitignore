@@ -1,1 +1,6 @@
-.env credentials.json token.json commands.txt 
+.env
+credentials.json
+token.json
+commands.txt
+token.pickle
+client_secret.json
