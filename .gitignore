@@ -1,6 +1,1 @@
-.env
-credentials.json
-token.json
-commands.txt
-__pycache__/
-*.pyc
+.env credentials.json token.json commands.txt 
