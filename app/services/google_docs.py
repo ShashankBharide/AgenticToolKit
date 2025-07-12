@@ -28,7 +28,7 @@ def get_oauth_creds():
     if not creds or not creds.valid:
         flow = InstalledAppFlow.from_client_secrets_file(
             'client_secret.json', SCOPES)  # Uses your downloaded OAuth credentials
-        creds = flow.run_local_server(port=0)  # Opens a browser for you to log in
+        creds = flow.run_console()  # Opens a browser for you to log in
         # Save the credentials for next time
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
