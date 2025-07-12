@@ -15,13 +15,13 @@ SCOPES = [
 # If the variable is not set, default to 'credentials.json' in current folder.
 GOOGLE_CREDENTIALS_PATH = os.getenv("GOOGLE_CREDENTIALS_PATH", "credentials.json")
 
-FOLDER_ID = "1NL2GbtP-1UFtk3O820P1kJ9Bxyqhbl4O"
+FOLDER_ID = "1NL2GbtP-1UFtk3O820P1kJ9Bxyqhbl4O" # <-- Replace with your real wbw_posts folder ID
+
 def create_google_doc(title, content):
     """
-    Creates or updates a Google Doc with the specified title and content.
+    Creates or updates a Google Doc with the specified title and content in the wbw_posts folder.
     Returns the public URL to edit the document.
     """
-
     try:
         # Use Service Account credentials.
         # This reads the JSON key file you downloaded from Google Cloud Console.
@@ -31,20 +31,23 @@ def create_google_doc(title, content):
             scopes=SCOPES
         )
 
-        # Build the Docs API client using the credentials.
-        service = build('docs', 'v1', credentials=creds)
+        # Build the Drive API client using the credentials.
+        drive_service = build('drive', 'v3', credentials=creds)
 
-        # Create a new empty document with the given title.
-        doc = service.documents().create(body={'title': title}).execute()
-        doc_id = doc.get('documentId')  # Extract the document ID
+        # Create a new Google Doc in the wbw_posts folder
+        file_metadata = {
+            'name': title,
+            'mimeType': 'application/vnd.google-apps.document',
+            'parents': [FOLDER_ID]
+        }
+        doc = drive_service.files().create(body=file_metadata, fields='id').execute()
+        doc_id = doc.get('id')
 
         # Grant permissions using Drive API
-        drive_service = build('drive', 'v3', credentials=creds)
         permission = {
             "type": "anyone",
-            "role": "reader"  # or "writer" if you want to let anyone edit
+            "role": "reader"
         }
-
         drive_service.permissions().create(
             fileId=doc_id,
             body=permission
