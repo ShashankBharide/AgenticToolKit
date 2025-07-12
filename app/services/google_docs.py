@@ -17,19 +17,16 @@ def get_oauth_creds():
     - If not, it opens a browser for you to log in and saves the token for next time.
     """
     creds = None
-<<<<<<< HEAD
-    # If token.pickle exists, load the saved credentials
-=======
->>>>>>> 35a90a9744116bbee9c22a035651d858e49946fa
     if os.path.exists('token.pickle'):
         with open('token.pickle', 'rb') as token:
             creds = pickle.load(token)
-    # If no valid credentials, start the login flow
     if not creds or not creds.valid:
         flow = InstalledAppFlow.from_client_secrets_file(
-            'client_secret.json', SCOPES)  # Uses your downloaded OAuth credentials
-        creds = flow.run_local_server(port=0)  # Opens a browser for you to log in
-        # Save the credentials for next time
+            'client_secret.json',
+            SCOPES
+        )
+        creds = flow.run_local_server(port=0)
+        # Save credentials for future runs
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
     return creds
@@ -42,6 +39,7 @@ def create_google_doc(title, content):
     try:
         # Get OAuth credentials (will prompt you to log in the first time)
         creds = get_oauth_creds()
+
         # Build the Drive and Docs API clients
         drive_service = build('drive', 'v3', credentials=creds)
         docs_service = build('docs', 'v1', credentials=creds)
@@ -50,11 +48,12 @@ def create_google_doc(title, content):
         file_metadata = {
             'name': title,  # The title of your new doc
             'mimeType': 'application/vnd.google-apps.document'
-            # If you want to put it in a folder, add: 'parents': [FOLDER_ID]
+            # To put in a folder, add: 'parents': [FOLDER_ID]
         }
-        # Create the new Google Doc in your Drive
+
+        # Create the new Google Doc
         doc = drive_service.files().create(body=file_metadata, fields='id').execute()
-        doc_id = doc.get('id')  # Get the new document's ID
+        doc_id = doc.get('id')
 
         # Prepare the request to insert your content at the start of the doc
         requests = [{
@@ -63,6 +62,7 @@ def create_google_doc(title, content):
                 'text': content
             }
         }]
+
         # Add the content to the doc
         docs_service.documents().batchUpdate(
             documentId=doc_id,
@@ -75,8 +75,4 @@ def create_google_doc(title, content):
     except Exception as e:
         # Print and return a friendly error message if something goes wrong
         print(f"Google Docs API error: {e}")
-<<<<<<< HEAD
         return {"error": "There was a problem creating your Google Doc. Please try again later."}
-=======
-        return {"error": "There was a problem creating your Google Doc. Please try again later."}
->>>>>>> 35a90a9744116bbee9c22a035651d858e49946fa
