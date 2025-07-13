@@ -1,9 +1,9 @@
-
 import os
 import logging
 import pickle
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+import traceback
 
 # These are the permissions your app will ask for.
 SCOPES = [
@@ -26,7 +26,7 @@ def get_oauth_creds():
     if not creds or not creds.valid:
         flow = InstalledAppFlow.from_client_secrets_file(
             'client_secret.json', SCOPES)  # Uses your downloaded OAuth credentials
-        creds = flow.run_local_server(port=0)  # Opens a browser for you to log in
+        creds = flow.run_console()  # <-- CHANGE IS HERE
         # Save the credentials for next time
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
@@ -73,4 +73,5 @@ def create_google_doc(title, content):
     except Exception as e:
         # Print and return a friendly error message if something goes wrong
         print(f"Google Docs API error: {e}")
+        traceback.print_exc()
         return {"error": "There was a problem creating your Google Doc. Please try again later."}
