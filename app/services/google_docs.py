@@ -3,6 +3,7 @@ import logging
 import pickle
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from google.oauth2 import service_account
 import traceback
 
 # These are the permissions your app will ask for.
@@ -79,3 +80,9 @@ def create_google_doc(title, content):
         print(f"Google Docs API error: {e}")
         traceback.print_exc()
         return {"error": "There was a problem creating your Google Doc. Please try again later."}
+
+creds = service_account.Credentials.from_service_account_file(
+    'credentials.json', scopes=SCOPES
+)
+docs_service = build('docs', 'v1', credentials=creds)
+drive_service = build('drive', 'v3', credentials=creds)
