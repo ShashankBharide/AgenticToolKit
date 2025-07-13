@@ -1,5 +1,6 @@
 import os
 import pickle
+import traceback
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
@@ -8,6 +9,9 @@ SCOPES = [
     'https://www.googleapis.com/auth/drive.file'
 ]
 
+flow = InstalledAppFlow.from_client_secrets_file('client_secret.json', SCOPES)
+creds = flow.run_local_server(port=0)
+
 def get_oauth_creds():
     creds = None
     if os.path.exists('token.pickle'):
@@ -15,11 +19,7 @@ def get_oauth_creds():
             creds = pickle.load(token)
     if not creds or not creds.valid:
         flow = InstalledAppFlow.from_client_secrets_file('client_secret.json', SCOPES)
-        auth_url, _ = flow.authorization_url(prompt='consent')
-        print("Go to the following URL in your browser:", auth_url)
-        code = input("Enter the authorization code: ")
-        flow.fetch_token(code=code)
-        creds = flow.credentials
+        creds = flow.run_local_server(port=0)
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
     return creds
