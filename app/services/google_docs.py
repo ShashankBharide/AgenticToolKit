@@ -26,7 +26,11 @@ def get_oauth_creds():
     if not creds or not creds.valid:
         flow = InstalledAppFlow.from_client_secrets_file(
             'client_secret.json', SCOPES)  # Uses your downloaded OAuth credentials
-        creds = flow.run_console()  # <-- CHANGE IS HERE
+        auth_url, _ = flow.authorization_url(prompt='consent')
+        print("Go to the following URL in your browser:", auth_url)
+        code = input("Enter the authorization code: ")
+        flow.fetch_token(code=code)
+        creds = flow.credentials
         # Save the credentials for next time
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
