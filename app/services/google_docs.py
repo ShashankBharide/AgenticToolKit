@@ -81,8 +81,19 @@ def create_google_doc(title, content):
         traceback.print_exc()
         return {"error": "There was a problem creating your Google Doc. Please try again later."}
 
-creds = service_account.Credentials.from_service_account_file(
-    'credentials.json', scopes=SCOPES
-)
-docs_service = build('docs', 'v1', credentials=creds)
+def get_service_account_creds():
+    """
+    Gets service account credentials for Google API access.
+    """
+    SCOPES = [
+        'https://www.googleapis.com/auth/documents',
+        'https://www.googleapis.com/auth/drive.file'
+    ]
+    creds = service_account.Credentials.from_service_account_file(
+        'credentials.json', scopes=SCOPES
+    )
+    return creds
+
+creds = get_service_account_creds()
 drive_service = build('drive', 'v3', credentials=creds)
+docs_service = build('docs', 'v1', credentials=creds)
