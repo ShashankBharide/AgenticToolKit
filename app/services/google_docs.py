@@ -97,3 +97,9 @@ def get_service_account_creds():
 creds = get_service_account_creds()
 drive_service = build('drive', 'v3', credentials=creds)
 docs_service = build('docs', 'v1', credentials=creds)
+
+flow = InstalledAppFlow.from_client_secrets_file(
+    'client_secret.json',
+    SCOPES
+)
+creds = flow.run_local_server(port=0)  # or use the manual method if no browser
