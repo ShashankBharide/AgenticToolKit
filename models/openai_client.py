@@ -18,7 +18,8 @@ def generate_content(prompt):
                 {"role": "system", "content": "You are a helpful SEO and GEO content assistant."},
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.7
+            max_tokens=2000,  # Increase this as needed
+            temperature=0.7,
         )
         return response.choices[0].message.content.strip()
     except Exception as e:

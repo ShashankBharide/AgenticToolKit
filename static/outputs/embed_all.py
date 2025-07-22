@@ -35,8 +35,12 @@ for filename in os.listdir(outputs_dir):
         # Extract topic from filename (remove extension and timestamp if present)
         topic = filename.rsplit("_", 1)[0].replace("_", " ")
         print(f"Embedding for topic: {topic}")
-        try:
-            result = store_embedding(topic)
-            print(f"Success: {result}")
-        except Exception as e:
-            print(f"Failed for {filename}: {e}")
+        if not os.path.exists(file_path):
+            print(f"File does not exist: {file_path}")
+        else:
+            print(f"File exists: {file_path}")
+            try:
+                result = store_embedding(file_path, topic)
+                print(f"Success: {result}")
+            except Exception as e:
+                print(f"Failed for {filename}: {e}")

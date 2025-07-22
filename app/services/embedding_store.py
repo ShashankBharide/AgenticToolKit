@@ -33,18 +33,15 @@ def get_latest_file_by_topic(topic, outputs_dir=OUTPUT_DIR):
     files.sort(key=lambda f: os.path.getmtime(os.path.join(outputs_dir, f)), reverse=True)
     return os.path.join(outputs_dir, files[0])
 
-def store_embedding(topic):
+def store_embedding(file_path, topic=None):
     """
     Loads the latest file for the given topic, generates an embedding using OpenAI,
     and stores it in a FAISS index along with metadata.
     Returns info about the stored embedding or an error message.
     """
+    if not os.path.exists(file_path):
+        return {"error": f"No file found for topic '{file_path}'."}
     try:
-        # Find the latest file for the topic
-        file_path = get_latest_file_by_topic(topic)
-        if not file_path:
-            return {"error": f"No file found for topic '{topic}'."}
-        
         # Read the file content
         try:
             # Make sure file path uses forward slashes
