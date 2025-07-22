@@ -9,7 +9,7 @@ import logging
 OUTPUT_DIR = "static/outputs"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-def write_output_file(agent_name, payload, prompt, context, output, filename=None):
+def write_output_file(agent_name, output, filename, payload=None, prompt=None, context=None):
     """
     Write the output to a .txt file in static/outputs.
     If filename is provided, use it; otherwise, generate a default one.
@@ -17,11 +17,11 @@ def write_output_file(agent_name, payload, prompt, context, output, filename=Non
 
     Args:
         agent_name (str): Name of the agent.
-        payload (dict): Original request payload.
-        prompt (str): Prompt sent to GPT.
-        context (str): Additional user-supplied context.
         output (str): Final generated output.
         filename (str, optional): Custom filename for the output file.
+        payload (dict, optional): Original request payload.
+        prompt (str, optional): Prompt sent to GPT.
+        context (str, optional): Additional user-supplied context.
 
     Returns:
         tuple: (filename, full_output)
