@@ -10,6 +10,14 @@ SCOPES = [
     'https://www.googleapis.com/auth/drive.file'    # Create/edit files in your Drive
 ]
 
+def get_service_account_creds():
+    creds = None
+    creds = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES
+    )
+    return creds
+
+
 def get_oauth_creds():
     """
     Handles the OAuth login flow.
@@ -44,7 +52,7 @@ def create_google_doc(title, content):
     """
     try:
         # Get OAuth credentials (will prompt you to log in the first time)
-        creds = get_oauth_creds()
+        creds = get_service_account_creds()
         # Build the Drive and Docs API clients
         drive_service = build('drive', 'v3', credentials=creds)
         docs_service = build('docs', 'v1', credentials=creds)
