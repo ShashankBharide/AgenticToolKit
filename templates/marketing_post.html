@@ -7,11 +7,8 @@
 </head>
 <body class="bg-light">
     <div class="container py-5">
-        {% include 'header.html' %}
-
         <a href="/" class="btn btn-link mb-4">&larr; Back to Welcome</a>
-        <h1 class="mb-4" style="color: #1e4d6b; font-weight: bold;">Generate a Marketing Post</h1>
-
+        <h1 class="mb-4 text-primary">Generate a Marketing Post</h1>
         <form method="POST" class="card p-4 shadow-sm mb-4">
             <div class="mb-3">
                 <label for="topic" class="form-label">Topic</label>
@@ -29,30 +26,25 @@
                     <option value="Long">Long</option>
                 </select>
             </div>
-            <button type="submit" class="btn" style="background-color: #1e4d6b; border-color: #1e4d6b; color: white; font-weight: 600;">Generate Post</button>
+            <button type="submit" class="btn btn-primary">Generate Post</button>
         </form>
-
         {% if post %}
         <div class="card p-4 shadow-sm mb-4">
             <h5 class="card-title text-success">Generated Post</h5>
             <pre class="card-text" style="white-space: pre-wrap;">{{ post }}</pre>
         </div>
         {% endif %}
-
         {% if doc_url %}
         <div class="alert alert-info mt-3">
             <strong>Google Doc created:</strong>
             <a href="{{ doc_url }}" target="_blank">{{ doc_url }}</a>
         </div>
         {% endif %}
-
         {% if error %}
         <div class="alert alert-danger mt-3">
             <strong>Error:</strong> {{ error }}
         </div>
         {% endif %}
-
-        {% include 'footer.html' %}
     </div>
 </body>
 </html>
