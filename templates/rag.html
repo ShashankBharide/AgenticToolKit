@@ -7,15 +7,19 @@
 </head>
 <body class="bg-light">
     <div class="container py-5">
+        {% include 'header.html' %}
+
         <a href="/" class="btn btn-link mb-4">&larr; Back to Welcome</a>
-        <h1 class="mb-4 text-info">RAG (Semantic Search)</h1>
+        <h1 class="mb-4" style="color: #1e4d6b; font-weight: bold;">RAG (Semantic Search)</h1>
+
         <form method="POST" class="card p-4 shadow-sm mb-4">
             <div class="mb-3">
                 <label for="rag_query" class="form-label">Ask a question:</label>
                 <input type="text" class="form-control" id="rag_query" name="rag_query" required>
             </div>
-            <button type="submit" class="btn btn-info">Ask</button>
+            <button type="submit" class="btn" style="background-color: #1e4d6b; border-color: #1e4d6b; color: white; font-weight: 600;">Ask</button>
         </form>
+
         {% if rag_answer %}
         <div class="card p-4 shadow-sm mb-4">
             <h5 class="card-title text-success">RAG Answer</h5>
@@ -32,6 +36,8 @@
             {% endif %}
         </div>
         {% endif %}
+
+        {% include 'footer.html' %}
     </div>
 </body>
 </html>
