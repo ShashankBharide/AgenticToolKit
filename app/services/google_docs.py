@@ -32,7 +32,7 @@ def get_oauth_creds():
             try:
                 flow = InstalledAppFlow.from_client_secrets_file(client_secrets_file, SCOPES)
                 # Detect headless env: no DISPLAY or SSH or terminal-only
-                if os.environ.get("ENV") == "PROD" or not os.environ.get("DISPLAY"):
+                if os.environ.get("FLASK_ENV", "").lower() == "prod" or not os.environ.get("DISPLAY"):
                     creds = flow.run_console()
                 else:
                     creds = flow.run_local_server(port=0)
