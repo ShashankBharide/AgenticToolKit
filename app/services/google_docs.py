@@ -12,17 +12,36 @@ SCOPES = [
 
 def get_oauth_creds():
     creds = None
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    token_file = 'token.pickle'
+    client_secrets_file = 'client_secret.json'
+
+    # Load saved token
+    if os.path.exists(token_file):
+        with open(token_file, 'rb') as token:
             creds = pickle.load(token)
+
+    # If token invalid or not present, refresh or re-authenticate
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file('client_secret.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
+            try:
+                creds.refresh(Request())
+            except Exception as e:
+                logging.error(f"Token refresh failed: {e}", exc_info=True)
+                creds = None  # Force re-auth
+        if not creds:
+            try:
+                flow = InstalledAppFlow.from_client_secrets_file(client_secrets_file, SCOPES)
+                # Detect headless env: no DISPLAY or SSH or terminal-only
+                if os.environ.get("ENV") == "PROD" or not os.environ.get("DISPLAY"):
+                    creds = flow.run_console()
+                else:
+                    creds = flow.run_local_server(port=0)
+                with open(token_file, 'wb') as token:
+                    pickle.dump(creds, token)
+            except Exception as e:
+                logging.error(f"OAuth flow failed: {e}", exc_info=True)
+                raise e
+
     return creds
 
 def create_google_doc(title, content):
