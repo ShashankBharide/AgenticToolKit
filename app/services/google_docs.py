@@ -73,4 +73,6 @@ def create_google_doc(title, content):
 
     except Exception as e:
         logging.error(f"Google Docs API error: {e}")
+        print(f"[ERROR] Google Docs API exception: {e}")
+
         return {"error": "There was a problem creating your Google Doc."}
