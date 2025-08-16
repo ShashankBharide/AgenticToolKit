@@ -2,7 +2,7 @@
 # Main Flask application setup
 
 import logging
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, session
 from app.routes.agent_router import agent_bp
 from app.routes.health import health_bp
 from app.services.seo_generator import run_seo_agent
@@ -15,6 +15,7 @@ from google.auth.transport.requests import Request  # <-- Add this line
 #from app.auth import login_manager, oauth  # or whatever you define in auth.py
 
 app = Flask(__name__, template_folder="../templates")
+app.secret_key = os.environ.get("SECRET_KEY", "dev")
 
 # Registering the agent and health check routes
 app.register_blueprint(agent_bp)
@@ -24,6 +25,20 @@ app.register_blueprint(health_bp)
 @app.route("/")
 def welcome():
     return render_template("welcome.html")
+
+
+# Simple login route
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    error = None
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        if username == "admin" and password == "password":
+            session["logged_in"] = True
+            return redirect(url_for("welcome"))
+        error = "Invalid credentials"
+    return render_template("login.html", error=error)
 
 # Content Generator Route (Classic and Agentic)
 @app.route("/content-generator", methods=["GET", "POST"])
